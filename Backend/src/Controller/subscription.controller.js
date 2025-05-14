@@ -43,3 +43,28 @@ const toggleSubscription = asyncHandler(async (req,res)=>{
     
     
 });
+
+const getchannelSubscriber = asyncHandler(async(req,res)=>{
+    const {Channelusername} = req.body
+    const ChannelId = await User.findOne({
+        username: Channelusername
+    })
+    console.log(ChannelId)
+    if(!ChannelId){
+        throw new ApiError(401,"ChannelId not found")
+    }
+    const subscribers = await Subscription.find({
+        channel: ChannelId._id
+    })
+    console.log(subscribers)
+    if(subscribers){
+        return res.
+        status(200).
+        json(new ApiResponse(201,subscribers,"Subscriber list fetched"))
+    }
+    //fully woking
+})
+
+export {toggleSubscription,
+      getchannelSubscriber,
+}
