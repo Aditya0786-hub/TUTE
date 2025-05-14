@@ -16,14 +16,14 @@ app.use(express.static("public"))
 app.use(cookieParser())
 
 import userRouter from "./routes/user.routes.js"
-// import subcriptionrouter from "./routes/subscription.routes.js"
+import subcriptionrouter from "./routes/subscription.routes.js"
 // import videoRouter from "./routes/video.routes.js"
 // import playlistRouter from "./routes/playlist.routes.js"
 
 //declaring routes
 
 app.use("/api/v2/users", userRouter)
-// app.use("/api/v1/subscription", subcriptionrouter )
+app.use("/api/v2/subscription", subcriptionrouter )
 // app.use("/api/v1/videos", videoRouter)
 // app.use("/api/v1/playlist", playlistRouter)
 
