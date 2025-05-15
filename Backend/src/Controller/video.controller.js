@@ -65,3 +65,5 @@ const publishVideo = asyncHandler(async(req,res)=>{
     )
     
 })
+
+export {publishVideo}
