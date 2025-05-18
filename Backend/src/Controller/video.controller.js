@@ -173,4 +173,43 @@ const getVideosbyId = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, Videoplay[0], "Video is presented"))
   })
 
-export {publishVideo}
+  const deleteVideobyId = asyncHandler(async(req,res)=>{
+    const {videoId} = req.params
+    if(!videoId){
+        throw new ApiError(400,"Video id is not present or fetched")
+    }
+    try {
+        await Video.findByIdAndDelete(videoId)
+        
+    } catch (error) {
+       throw new ApiError(401,"Video cannot be Deleted or not available") 
+    }
+    res.status(200)
+    .json(new ApiResponse(201,"Video is deleted"))
+})//need testing
+
+const togglePublishStatus = asyncHandler(async(req,res)=>{
+    const {videoId} = req.params
+    if(!videoId){
+        throw new ApiError(400,"Video id is not present or fetched")
+    }
+    const updatedVideo = await Video.findByIdAndUpdate(
+        videoId,
+        {$set:{isPublished:!videoId.isPublished}},
+        {new:true}
+    )
+    if(!updatedVideo){
+        throw new ApiError(201,"Video cannot be updated")
+    }
+    return res.status(200)
+    .json(new ApiResponse(200,updatedVideo,"Video is updated"))
+    
+})
+
+
+export {publishVideo,
+        getAllVideos,
+        getVideosbyId,
+        deleteVideobyId,
+        togglePublishStatus
+}
