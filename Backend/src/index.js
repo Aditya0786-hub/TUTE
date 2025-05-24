@@ -13,7 +13,7 @@ dotenv.config({
 connectDB()
 .then(()=>{
     app.listen(process.env.PORT || 7000, ()=>{
-        console.log("server establised")
+        console.log(`server establised at ${process.env.PORT}`)
     })
 })
 .catch((err)=>{

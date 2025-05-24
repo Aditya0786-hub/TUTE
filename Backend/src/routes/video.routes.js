@@ -4,9 +4,16 @@ import { verifyJWT } from "../middlewares/Auth.middleware.js";
 import { getAllVideos, getVideosbyId, publishVideo } from "../Controller/video.controller.js";
 
 
+console.log("router there")
+const router = Router()
+router.use(verifyJWT)
+// Apply verifyJWT middleware to all routes in this file
 
-const router = Router();
-router.use(verifyJWT); // Apply verifyJWT middleware to all routes in this file
+router.get("/health", (req, res) => {
+    console.log("router is wroking")
+  res.json({ message: "video router is working" });
+  
+});
 
 router.route("/publishvideo").post(
     upload.fields([
