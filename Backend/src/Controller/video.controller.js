@@ -79,13 +79,13 @@ const publishVideo = asyncHandler(async(req,res)=>{
         //add an aggreagation pipeline,for match,sort and lookup to get the information of the video owner
         const pageNum  = parseInt(page,10)
         const limitNum = parseInt(limit,10)
-        console.log(query)
+        console.log("Query is:",query)
         const matchCondition = {
             isPublished: true
         }
-        console.log(userId)
+        console.log("User Id is:",userId)
         if(userId){
-            matchCondition.owner  = userId
+            matchCondition.owner  = new mongoose.Types.ObjectId(userId)
         }
 
         if(query){
@@ -97,7 +97,7 @@ const publishVideo = asyncHandler(async(req,res)=>{
         const sortOption = {
             [sortBy]: sortType === "asc"? 1:-1
         }
-        console.log(matchCondition.$or)
+        console.log("Owner is:",matchCondition.owner)
         const allVideos = [
             {$match: matchCondition},
             {$sort: sortOption},
@@ -148,7 +148,7 @@ const publishVideo = asyncHandler(async(req,res)=>{
 
 const getVideosbyId = asyncHandler(async (req, res) => {
     const { videoId } = req.params
-    console.log("videoId:", videoId)
+    // console.log("videoId:", videoId)
   
     if (!videoId) {
       throw new ApiError(400, "VideoID is not present")
