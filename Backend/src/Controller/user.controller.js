@@ -348,7 +348,7 @@ const getUserChannelProfile = asyncHandler(async (req,res)=>{
     //get the subscribedTo count by countinf the subscriber
     
     const { username } = req.params //we can get the variable username throught this
-    // console.log(username)
+    console.log(username)
 
     if(!username?.trim()){
         throw new ApiError(401,"username is missing")
