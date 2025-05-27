@@ -21,12 +21,13 @@ app.use(cookieParser());
 import userRouter from "./routes/user.routes.js";
 import subcriptionrouter from "./routes/subscription.routes.js";
 import videoRouter from "./routes/video.routes.js";
-
+import commentsRouter from "./routes/comments.routes.js"
 //declaring routes
 
 app.use("/api/v2/users", userRouter);
 app.use("/api/v2/video", videoRouter);
 app.use("/api/v2/subscription", subcriptionrouter);
+app.use("/api/v2/comments", commentsRouter)
 
 
 
