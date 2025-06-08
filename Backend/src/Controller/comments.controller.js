@@ -39,7 +39,7 @@ const addComment = asyncHandler( async(req,res)=>{
 
 const getAllComments = asyncHandler( async(req,res)=>{
     const {videoId} = req.params
-    const {page = 1,limit = 10} = req.query
+    const {page = 1,limit = 10, sortBy = "createdAt", sortType = "desc"} = req.query
 
      const pageNum  = parseInt(page,10)
     const limitNum = parseInt(limit,10)
@@ -52,11 +52,18 @@ const getAllComments = asyncHandler( async(req,res)=>{
         throw new ApiError(400,"VideoId is not valid ObjectId")
     }
 
+    const sortOption = {
+            [sortBy]: sortType === "asc"? 1:-1
+        }
+
     const allComments = [
         {$match:
             {
                 video:  new mongoose.Types.ObjectId(videoId)
             }
+        },
+        {
+            $sort: sortOption
         },
         {
             $lookup:{
@@ -109,6 +116,37 @@ const getAllComments = asyncHandler( async(req,res)=>{
     )
 })
 
+const deleteComment = asyncHandler( async(req,res)=>{
+      const { commentId } = req.params;
+
+    // Validate commentId
+    if (!commentId || !mongoose.Types.ObjectId.isValid(commentId)) {
+        throw new ApiError(400, "Invalid or missing comment ID");
+    }
+
+    // Find the comment
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+        throw new ApiError(404, "Comment not found");
+    }
+
+    // Check if the requester is the comment owner or an admin
+    if (comment.owner.toString() !== req.user._id.toString()) {
+        throw new ApiError(403, "Unauthorized to delete this comment");
+    }
+
+    try {
+        await comment.deleteOne();
+        res.status(200).json(
+            new ApiResponse(200, null, "Comment deleted successfully")
+        );
+    } catch (err) {
+        console.error("Error deleting comment:", err);
+        throw new ApiError(500, "Internal Server Error: Could not delete comment");
+    }
+})
+
 export {addComment,
-    getAllComments
+    getAllComments,
+    deleteComment
 }
