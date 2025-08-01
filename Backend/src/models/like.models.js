@@ -4,7 +4,18 @@ import mongoose,{Schema} from "mongoose";
     {
         video: {
             type: Schema.Types.ObjectId,
-            ref: "video"
-        }
+            ref: "Video"
+        },
+        comment: {
+            type: Schema.Types.ObjectId,
+            ref: "Comment"
+        },
+        likedBy: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+        },
+
     }
  )
+
+ export const Like = mongoose.model("Like",likeSchema)
