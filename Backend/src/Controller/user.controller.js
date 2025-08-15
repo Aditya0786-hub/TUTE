@@ -18,7 +18,7 @@ const generateAccessandRefreshTokens = async(userID)=>{
         return {accessToken, refreshToken}
 
     } catch (error) {
-        
+        throw new ApiError(401, error?.message || "Token not generated")
     }
 }
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from "react";
 import { Mail, Lock, Eye, User, Globe, User2, UploadCloud } from "lucide-react";
+import { AuthService } from '../../Features/Auth/AuthService';
 
 const Signin = ({setLogin}) => {
 
@@ -21,6 +22,18 @@ const Signin = ({setLogin}) => {
        const handleSubmit = async(e)=>{
         e.preventDefault()
         
+         try {
+        const user = await AuthService.login(formData)
+        console.log(user)
+        console.log("succesful")
+        localStorage.setItem("isLoggedIn", "true")
+        localStorage.setItem("accessToken", user.data.data.accessToken)
+        // window.location.reload(); 
+       } catch (err) {
+         console.log(err.data?.response?.message || "Register Unsuccesful")
+       }
+
+       console.log({...formData})
         
        }
         
@@ -30,7 +43,7 @@ const Signin = ({setLogin}) => {
     <div className="min-h-screen flex items-center justify-center sm:p-4 bg-gradient-to-r from-indigo-500 to-purple-500 p-0">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-8">
         {/* Avatar Icon */}
-    <form >
+    <form onSubmit={(e)=>handleSubmit(e)} >
             <div className="flex justify-center mb-4">
           <div className="bg-indigo-100 p-3 rounded-full">
             <User className="text-indigo-500" size={28} />
@@ -63,7 +76,8 @@ const Signin = ({setLogin}) => {
             <input
               type="email"
               name='email'
-              onClick={handleChange}
+              value={formData.email}
+              onChange={handleChange}
               placeholder="Enter your email"
               className="w-full py-2 focus:outline-none"
             />
@@ -78,6 +92,7 @@ const Signin = ({setLogin}) => {
             <input
               type="text"
               name='username'
+              value={formData.username}
               onChange={handleChange}
               placeholder="Enter your username"
               className="w-full py-2 focus:outline-none"
@@ -93,6 +108,7 @@ const Signin = ({setLogin}) => {
             <input
               type="text"
               name='password'
+              value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
               className="w-full py-2 focus:outline-none"
@@ -107,7 +123,7 @@ const Signin = ({setLogin}) => {
      </form>
        
         <div className="flex justify-center mt-6">
-          <p className="text-gray-600">Already have a account?<span className="text-blue-700 font-medium cursor-pointer" onClick={()=>setLogin(false)}>Sign-In Here!</span></p>
+          <p className="text-gray-600">Don't have a account?<span className="text-blue-700 font-medium cursor-pointer" onClick={()=>setLogin(false)}>Sign-Up Here!</span></p>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from "react";
-import { Mail, Lock, Eye, User, Globe, User2, UploadCloud } from "lucide-react";
+import { Mail, Lock, Eye, User, Globe, User2, UploadCloud, UserCircle } from "lucide-react";
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoading, setUserData } from '../../Features/Auth/AuthSlice';
 import { AuthService } from '../../Features/Auth/AuthService';
@@ -48,7 +48,7 @@ const Signup = ({setLogin}) => {
             const user = await AuthService.register(data);
             console.log(user)
             dispatch(setLoading(false))
-            dispatch(setUserData(user.data))
+            dispatch(setUserData(user.data.data))
             setMessage("User Registered")
            } catch (error) {
             console.log(error.data?.response?.message || "Registeration Failed")
@@ -79,7 +79,7 @@ const Signup = ({setLogin}) => {
               Welcome Back
             </h2>
             <p className="text-center text-gray-500 mb-6">
-              Please sign in to your account
+              Please Register your account.
             </p>
 
             {/* Social Buttons */}
@@ -95,6 +95,24 @@ const Signup = ({setLogin}) => {
                 or continue with email
               </span>
               <hr className="flex-grow border-gray-300" />
+            </div>
+            {/* fullName */}
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">
+                Full Name
+              </label>
+              <div className="flex items-center border border-gray-300 rounded-md px-3">
+                <UserCircle className="text-gray-400 mr-2" size={18} />
+                <input
+                  type="text"
+                  name='fullName' //important
+                  placeholder="Enter your name"
+                  onChange={handleChange}
+                  value={formData.fullName}
+                  className="w-full py-2 focus:outline-none"
+                />
+              </div>
             </div>
 
             {/* Email Input */}
@@ -204,12 +222,12 @@ const Signup = ({setLogin}) => {
          
           <div className="flex justify-center  pt-4">
             <p className="text-gray-600">
-              Don't have a account?
+              Already have a account?
               <span
                 className="text-blue-700 font-medium cursor-pointer"
                 onClick={() => setLogin(true)}
               >
-                Sign-Up Here!
+                Sign-In Here!
               </span>
             </p>
           </div>
