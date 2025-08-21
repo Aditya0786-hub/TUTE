@@ -6,14 +6,12 @@ import { Play, Clock, Eye, Calendar, User, Heart, Share2, Bookmark, MoreHorizont
  * 
  * @param {Object} props - Component props
  * @param {Object} props.video - Video data object
- * @param {Function} props.onPlay - Callback when video is played
  * @param {Function} props.onLike - Callback when video is liked
  * @param {Function} props.onShare - Callback when video is shared
  * @param {Function} props.onBookmark - Callback when video is bookmarked
  */
 const VideoCard = ({ 
-  video, 
-  onPlay = () => {}, 
+  video,  
   onLike = () => {}, 
   onShare = () => {}, 
   onBookmark = () => {} 
@@ -75,9 +73,7 @@ const VideoCard = ({
   };
 
   // Handle card click
-  const handleCardClick = () => {
-    onPlay(video.id);
-  };
+  
 
   return (
     <article
@@ -85,7 +81,6 @@ const VideoCard = ({
       className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 ease-out transform hover:-translate-y-2 cursor-pointer overflow-hidden border border-gray-100"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={handleCardClick}
       role="button"
       tabIndex={0}
       aria-label={`Play video: ${video.title}`}
@@ -118,7 +113,7 @@ const VideoCard = ({
         {/* Duration Badge */}
         <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-sm text-white text-xs font-medium px-2 py-1 rounded-lg flex items-center space-x-1">
           <Clock className="w-3 h-3" />
-          <span>{formatDuration(video.duration)}</span>
+          <span>{Number(video.duration).toFixed(2)}</span>
         </div>
 
         {/* Quality Badge */}
@@ -191,10 +186,10 @@ const VideoCard = ({
               <Eye className="w-4 h-4" />
               <span>{formatViews(video.views)} views</span>
             </div>
-            {/* <div className="flex items-center space-x-1">
+            <div className="flex items-center space-x-1">
               <Calendar className="w-4 h-4" />
-              <span>{formatDate(video.uploadDate)}</span>
-            </div> */}
+              <span>{formatDate(video.createdAt)}</span>
+            </div>
           </div>
         </div>
 

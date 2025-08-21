@@ -12,10 +12,13 @@ const App = () => {
 
    const data = async () => {
      try {
+       dispatch(setLoading(true))   
        const userData = await AuthService.getCurrentUser();
        console.log(userData);
-       dispatch(setUserData(userData.data.data));       
+       dispatch(setUserData(userData.data.data)); 
+       dispatch(setLoading(false))      
      } catch (error) {
+       dispatch(setLoading(false))   
        console.log(error?.data?.message || "User is not fetched");
      }
    };
@@ -24,16 +27,14 @@ const App = () => {
      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
      if (isLoggedIn) {
-       
+       dispatch(setLoading(true)) 
        data();
      } else {
        console.log("User is not logged in");
+       dispatch(setLoading(false)) 
      }
    }, []);
 
-  //  if(loading){
-  //   return <h1>loading...</h1>
-  //  }
    
 
   return (

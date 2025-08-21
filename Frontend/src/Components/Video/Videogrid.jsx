@@ -1,9 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
-import VideoCard from './VideoCard';
-import { Search, Filter, Grid, List, TrendingUp, Clock, Star } from 'lucide-react';
-import { useSelector,useDispatch } from 'react-redux';
-import { setloading, setVideoData } from '../../Features/Video/video.slice';
-import { VideoService } from '../../Features/Video/video.service';
+import React, { useState, useEffect, useRef } from "react";
+import VideoCard from "./VideoCard";
+import {
+  Search,
+  Filter,
+  Grid,
+  List,
+  TrendingUp,
+  Clock,
+  Star,
+} from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
+import { setloading, setVideoData } from "../../Features/Video/video.slice";
+import { VideoService } from "../../Features/Video/video.service";
+import { Link } from "react-router-dom";
 
 /**
  * VideoGrid Component - A responsive grid layout for video cards with filtering and sorting
@@ -11,58 +20,60 @@ import { VideoService } from '../../Features/Video/video.service';
 const VideoGrid = () => {
   const [videos, setVideos] = useState([]);
   const [filteredVideos, setFilteredVideos] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('recent');
-  const [viewMode, setViewMode] = useState('grid');
-  
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("recent");
+  const [viewMode, setViewMode] = useState("grid");
+
   const gridRef = useRef(null);
 
-
-
   //Api to fetch all video data
-  const video = useSelector((state)=>state.video.VideoData)
-  const loading =  useSelector((state)=>state.video.loading)
-  console.log(loading)
+  const video = useSelector((state) => state.video.VideoData);
+  const loading = useSelector((state) => state.video.loading);
+  console.log(loading);
   const dispatch = useDispatch();
 
-   const fetchVideo = async()=>{
-      try {
-        dispatch(setloading(true))
-        const res = await VideoService.getAllVideos();
-        dispatch(setVideoData(res.data.data.docs))
-        dispatch(setloading(false))
-        setVideos(res.data.data.docs)
-        setFilteredVideos(res.data.data.docs)
-        console.log(res.data.data)
-      } catch (error) {
-         dispatch(setloading(false))
-        console.log(error.data?.message || "Video not fetched")
-      }
-   }
-
+  const fetchVideo = async () => {
+    try {
+      dispatch(setloading(true));
+      const res = await VideoService.getAllVideos();
+      dispatch(setVideoData(res.data.data.docs));
+      dispatch(setloading(false));
+      setVideos(res.data.data.docs);
+      setFilteredVideos(res.data.data.docs);
+      console.log(res.data.data);
+    } catch (error) {
+      dispatch(setloading(false));
+      console.log(error.data?.message || "Video not fetched");
+    }
+  };
 
   // Initialize videos
   useEffect(() => {
-    fetchVideo()
+    fetchVideo();
   }, []);
 
   // Filter and sort videos
   useEffect(() => {
-    let filtered = videos.filter(video =>
-      video.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      video.creator.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      video.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    let filtered = videos.filter(
+      (video) =>
+        video.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        video.creator.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        video.tags.some((tag) =>
+          tag.toLowerCase().includes(searchQuery.toLowerCase())
+        )
     );
 
     // Sort videos
     switch (sortBy) {
-      case 'recent':
-        filtered.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+      case "recent":
+        filtered.sort(
+          (a, b) => new Date(b.uploadDate) - new Date(a.uploadDate)
+        );
         break;
-      case 'popular':
+      case "popular":
         filtered.sort((a, b) => b.views - a.views);
         break;
-      case 'liked':
+      case "liked":
         filtered.sort((a, b) => b.likes - a.likes);
         break;
       default:
@@ -73,27 +84,27 @@ const VideoGrid = () => {
   }, [videos, searchQuery, sortBy]);
 
   // Handle video actions
-  const handlePlay = (videoId) => {
-    console.log('Playing video:', videoId);
-    // Implement video play logic
-  };
+  // const handlePlay = (videoId) => {
+  //   console.log('Playing video:', videoId);
+  //   // Implement video play logic
+  // };
 
   const handleLike = (videoId, isLiked) => {
-    setVideos(prev => prev.map(video => 
-      video.id === videoId 
-        ? { ...video, isLiked, likes: video.likes + (isLiked ? 1 : -1) }
-        : video
-    ));
+    setVideos((prev) =>
+      prev.map((video) =>
+        video.id === videoId
+          ? { ...video, isLiked, likes: video.likes + (isLiked ? 1 : -1) }
+          : video
+      )
+    );
   };
 
-  
-
   const handleBookmark = (videoId, isBookmarked) => {
-    setVideos(prev => prev.map(video => 
-      video.id === videoId 
-        ? { ...video, isBookmarked }
-        : video
-    ));
+    setVideos((prev) =>
+      prev.map((video) =>
+        video.id === videoId ? { ...video, isBookmarked } : video
+      )
+    );
   };
 
   if (loading) {
@@ -123,8 +134,12 @@ const VideoGrid = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Discover Videos</h1>
-          <p className="text-gray-600">Explore curated content from top creators</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Discover Videos
+          </h1>
+          <p className="text-gray-600">
+            Explore curated content from top creators
+          </p>
         </div>
 
         {/* Controls */}
@@ -156,22 +171,22 @@ const VideoGrid = () => {
             {/* View Mode Toggle */}
             <div className="flex bg-gray-100 rounded-xl p-1">
               <button
-                onClick={() => setViewMode('grid')}
+                onClick={() => setViewMode("grid")}
                 className={`p-2 rounded-lg transition-colors duration-200 ${
-                  viewMode === 'grid' 
-                    ? 'bg-white text-blue-600 shadow-sm' 
-                    : 'text-gray-500 hover:text-gray-700'
+                  viewMode === "grid"
+                    ? "bg-white text-blue-600 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
                 }`}
                 aria-label="Grid view"
               >
                 <Grid className="w-5 h-5" />
               </button>
               <button
-                onClick={() => setViewMode('list')}
+                onClick={() => setViewMode("list")}
                 className={`p-2 rounded-lg transition-colors duration-200 ${
-                  viewMode === 'list' 
-                    ? 'bg-white text-blue-600 shadow-sm' 
-                    : 'text-gray-500 hover:text-gray-700'
+                  viewMode === "list"
+                    ? "bg-white text-blue-600 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
                 }`}
                 aria-label="List view"
               >
@@ -184,29 +199,30 @@ const VideoGrid = () => {
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-gray-600">
-            {filteredVideos.length} video{filteredVideos.length !== 1 ? 's' : ''} found
+            {filteredVideos.length} video
+            {filteredVideos.length !== 1 ? "s" : ""} found
             {searchQuery && ` for "${searchQuery}"`}
           </p>
         </div>
 
         {/* Video Grid */}
-        <div 
+        <div
           ref={gridRef}
           className={`grid gap-6 ${
-            viewMode === 'grid'
-              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-              : 'grid-cols-1 max-w-4xl mx-auto'
+            viewMode === "grid"
+              ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+              : "grid-cols-1 max-w-4xl mx-auto"
           }`}
         >
           {filteredVideos.map((video) => (
-            <VideoCard
-              key={video.id}
-              video={video}
-              onPlay={handlePlay}
-              onLike={handleLike}
-             
-              onBookmark={handleBookmark}
-            />
+            <Link key={video._id} to={`/video/${video._id}`}>
+              <VideoCard
+                key={video._id}
+                video={video}
+                onLike={handleLike}
+                onBookmark={handleBookmark}
+              />
+            </Link>
           ))}
         </div>
 
@@ -216,12 +232,14 @@ const VideoGrid = () => {
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search className="w-12 h-12 text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No videos found</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              No videos found
+            </h3>
             <p className="text-gray-600 mb-4">
               Try adjusting your search terms or browse our trending content
             </p>
             <button
-              onClick={() => setSearchQuery('')}
+              onClick={() => setSearchQuery("")}
               className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors duration-200"
             >
               Clear Search
