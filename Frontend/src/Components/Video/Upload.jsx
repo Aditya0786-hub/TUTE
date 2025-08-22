@@ -49,7 +49,6 @@ const VideoUploadPage = () => {
   };
 
   //Fetching video for library
-  // fetch function outside useEffect
   const fetchVideos = async (userId) => {
     const token = localStorage.getItem("accessToken");
     try {
@@ -68,6 +67,16 @@ const VideoUploadPage = () => {
       setVideos(data);
     });
   }, [user]);
+
+  //delete Video
+  const handleDelete = async()=>{
+    try {
+      const res = await VideoService.deleteVideos(videoToDelete._id)
+      console.log(res)
+    } catch (error) {
+      console.log("deleted not")
+    }
+  }
 
   // Toast notification system
   const showToast = (message, type = "success") => {
@@ -594,7 +603,7 @@ const VideoUploadPage = () => {
                 Cancel
               </button>
               <button
-                
+                onClick={handleDelete}
                 className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
               >
                 Delete

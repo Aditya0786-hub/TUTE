@@ -191,6 +191,9 @@ const getVideosbyId = asyncHandler(async (req, res) => {
     if(!videoId){
         throw new ApiError(400,"Video id is not present or fetched")
     }
+    if(!mongoose.Types.ObjectId.isValid(videoId)) {
+        throw new ApiError(500,"VideoId is not Valid")
+    }
     try {
         await Video.findByIdAndDelete(videoId)
         
@@ -219,10 +222,43 @@ const togglePublishStatus = asyncHandler(async(req,res)=>{
     
 })
 
+const addViews = asyncHandler(async(req,res)=>{
+    const {videoId} = req.params;
+    if(!videoId){
+        throw new ApiError(400,"Video id is not present or fetched")
+    }
+    if(!mongoose.Types.ObjectId.isValid(videoId)) {
+        throw new ApiError(500,"VideoId is not Valid")
+    }
+   const video = await Video.findById(videoId);
+    if (!video) {
+    throw new ApiError(404, "Video not found");
+  }
+
+  //  Increment views
+  try {
+    const updatedVideo = await Video.findByIdAndUpdate(
+      videoId,
+      { $inc: { views: 1 } }, // increment views by 1
+      { new: true }           // return updated document
+    );
+  } catch (error) {
+    throw new ApiError(400,"Views not Updated")
+  }
+
+  res.
+  status(200)
+  .json(
+    new ApiResponse(201,"Views Count updated")
+  )
+
+})
+
 
 export {publishVideo,
         getAllVideos,
         getVideosbyId,
         deleteVideobyId,
-        togglePublishStatus
+        togglePublishStatus,
+        addViews
 }

@@ -40,6 +40,12 @@ export const VideoService =  {
         })
         return res;
     },
+    deleteVideos: async(videoId)=>{
+      const res = await axios.delete(`${API_URl}/deleteVideo/${videoId}`,{
+        withCredentials: true
+      })
+      return res;
+    }
     
 
     
