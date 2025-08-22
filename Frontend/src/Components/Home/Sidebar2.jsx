@@ -1,7 +1,17 @@
 import React, { useState } from "react";
-import { Clock, Folder, Heart, Home, Menu, User, Video } from "lucide-react";
+import {
+  Clock,
+  Folder,
+  Heart,
+  Home,
+  LogOutIcon,
+  Menu,
+  User,
+  Video,
+} from "lucide-react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { AuthService } from "../../Features/Auth/AuthService";
 
 const Sidebar2 = () => {
   const user = useSelector((state) => state.auth.userData);
@@ -16,24 +26,35 @@ const Sidebar2 = () => {
     { icons: Folder, label: "Subscribers", link: "/subscribers" },
   ];
 
+  const handleLogout = async () => {
+    try {
+      await AuthService.logout();
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("accessToken");
+      window.location.reload();
+      console.log("Logout successful:", res.data.message);
+      // You can also redirect or show a toast here
+    } catch (err) {
+      console.log(err.response?.data?.message || "Logout failed");
+    }
+  };
+
   return (
     <div
       onClick={() => setSidebar(!sidebar)}
       className={`h-full fixed top-0 left-0 z-10 bg-white shadow-lg transition-all duration-300 ease-in-out
         ${sidebar ? "w-56" : "w-20"}`}
     >
-      {/* Toggle Button */}
-      {/* <div className={`flex ${sidebar?"":"justify-center"} p-3`}>
-        <button onClick={() => setSidebar(!sidebar)}>
-          <Menu />
-        </button>
-      </div> */}
-
       {/* Menu Items */}
+
       <div className="flex flex-col">
         {menuItems.map((item) => (
           <Link to={item.link} key={item.label} className="w-full">
-            <div className={`w-full h-16 flex items-center ${sidebar?"":"justify-center"} gap-3 px-4 hover:bg-amber-50 transition`}>
+            <div
+              className={`w-full h-16 flex items-center ${
+                sidebar ? "" : "justify-center"
+              } gap-3 px-4 hover:bg-amber-50 transition`}
+            >
               <item.icons className="shrink-0" />
               {/* Smoothly hide/show labels */}
               <span
@@ -45,6 +66,16 @@ const Sidebar2 = () => {
             </div>
           </Link>
         ))}
+        <div
+          className={`w-full h-16  flex items-center ${
+            sidebar ? "" : "justify-center"
+          } gap-3 px-4 hover:bg-red-50 text-red-600 transition cursor-pointer`}
+          onClick={handleLogout}
+        >
+          <button className="cursor-pointer">
+            <LogOutIcon />
+          </button>
+        </div>
       </div>
     </div>
   );

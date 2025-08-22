@@ -118,7 +118,7 @@ const Signin = ({ setLogin }) => {
                 onChange={handleChange}
                 placeholder="Enter your username"
                 className="w-full py-2 focus:outline-none"
-                required
+                
               />
             </div>
           </div>
