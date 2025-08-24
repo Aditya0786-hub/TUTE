@@ -34,7 +34,11 @@ const videoSchema = new Schema(
         owner: {
             type: Schema.Types.ObjectId,
             ref: "User"
-        }
+        },
+        viewedBy:[{
+            type: Schema.Types.ObjectId,
+            ref: "User"
+        }]
 
     }, 
     {

@@ -57,31 +57,30 @@ const VideoGrid = () => {
     let filtered = videos.filter(
       (video) =>
         video.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        video.creator.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        video.tags.some((tag) =>
-          tag.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+        video.owner.fullName.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    // Sort videos
-    switch (sortBy) {
-      case "recent":
-        filtered.sort(
-          (a, b) => new Date(b.uploadDate) - new Date(a.uploadDate)
-        );
-        break;
-      case "popular":
-        filtered.sort((a, b) => b.views - a.views);
-        break;
-      case "liked":
-        filtered.sort((a, b) => b.likes - a.likes);
-        break;
-      default:
-        break;
-    }
+    // // Sort videos
+    // switch (sortBy) {
+    //   case "recent":
+    //     filtered.sort(
+    //       (a, b) => new Date(b.uploadDate) - new Date(a.uploadDate)
+    //     );
+    //     break;
+    //   case "popular":
+    //     filtered.sort((a, b) => b.views - a.views);
+    //     break;
+    //   case "liked":
+    //     filtered.sort((a, b) => b.likes - a.likes);
+    //     break;
+    //   default:
+    //     break;
+    // }
 
     setFilteredVideos(filtered);
-  }, [videos, searchQuery, sortBy]);
+  }, [videos, searchQuery]);
+
+  
 
   // Handle video actions
   // const handlePlay = (videoId) => {

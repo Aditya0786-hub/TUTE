@@ -39,6 +39,7 @@ const addComment = asyncHandler( async(req,res)=>{
 
 const getAllComments = asyncHandler( async(req,res)=>{
     const {videoId} = req.params
+   
     const {page = 1,limit = 10, sortBy = "createdAt", sortType = "desc"} = req.query
 
      const pageNum  = parseInt(page,10)
@@ -91,7 +92,7 @@ const getAllComments = asyncHandler( async(req,res)=>{
             },
         }    
     ]
-    console.log(allComments)
+    
     if(!allComments){
         throw new ApiError(500,"All comments cannot be fetched")
     }
@@ -105,7 +106,7 @@ const getAllComments = asyncHandler( async(req,res)=>{
         Comment.aggregate(allComments),
         option
     )
-    console.log(commentResult)
+    // console.log(commentResult)
     if(!commentResult){
         throw new ApiError(500,"Pagination Cannot be done")
     }

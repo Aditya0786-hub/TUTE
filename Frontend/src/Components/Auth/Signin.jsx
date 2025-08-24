@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import bgImage from '../../assets/pink-arrow-sign-with-copy-space.jpg'
 import {
   Mail,
   Lock,
@@ -55,8 +56,13 @@ const Signin = ({ setLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center sm:p-4 bg-gradient-to-r from-indigo-500 to-purple-500 p-0">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-8">
+    <div
+      className=" min-h-screen flex items-center justify-center sm:p-4 bg-cover bg-center backdrop-blur-md p-0"
+      style={{ backgroundImage: `url(${bgImage})` }}
+    >
+      {/* overlay */}
+       <div className="absolute backdrop-blur-sm inset-0 bg-black/50"></div>
+      <div className="bg-white z-5 rounded-lg shadow-lg w-full max-w-md p-8">
         {/* Avatar Icon */}
         <form onSubmit={(e) => handleSubmit(e)}>
           <div className="flex justify-center mb-4">
@@ -118,7 +124,6 @@ const Signin = ({ setLogin }) => {
                 onChange={handleChange}
                 placeholder="Enter your username"
                 className="w-full py-2 focus:outline-none"
-                
               />
             </div>
           </div>
@@ -129,7 +134,7 @@ const Signin = ({ setLogin }) => {
             <div className="flex items-center border border-gray-300 rounded-md px-3">
               <Lock className="text-gray-400 mr-2" size={18} />
               <input
-                type={showpass?"text":"password"}
+                type={showpass ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
@@ -137,9 +142,19 @@ const Signin = ({ setLogin }) => {
                 className="w-full py-2 focus:outline-none"
                 required
               />
-              {showpass?
-                            (<Eye onClick={()=>setShowPass(false)} className="text-gray-400 cursor-pointer" size={18} />)
-                            :(<EyeOff onClick={()=>setShowPass(true)}  className="text-gray-400 cursor-pointer" size={18}/>)} 
+              {showpass ? (
+                <Eye
+                  onClick={() => setShowPass(false)}
+                  className="text-gray-400 cursor-pointer"
+                  size={18}
+                />
+              ) : (
+                <EyeOff
+                  onClick={() => setShowPass(true)}
+                  className="text-gray-400 cursor-pointer"
+                  size={18}
+                />
+              )}
             </div>
           </div>
           {/* Sign In Button */}

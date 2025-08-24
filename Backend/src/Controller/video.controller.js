@@ -236,15 +236,21 @@ const addViews = asyncHandler(async(req,res)=>{
   }
 
   //  Increment views
-  try {
-    const updatedVideo = await Video.findByIdAndUpdate(
-      videoId,
-      { $inc: { views: 1 } }, // increment views by 1
-      { new: true }           // return updated document
-    );
-  } catch (error) {
-    throw new ApiError(400,"Views not Updated")
-  }
+ 
+    if (!video.viewedBy.includes(req.user.id)) {
+      try {
+         await Video.findByIdAndUpdate(
+          videoId,
+          { $inc: { views: 1 } }, // increment views by 1
+          { new: true } // return updated document
+        );
+      } catch (error) {
+        throw new ApiError(400, "Views not Updated");
+      }
+    }
+    else{
+        throw new ApiResponse(201,"User Already watched the video")
+    }
 
   res.
   status(200)

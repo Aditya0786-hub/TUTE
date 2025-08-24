@@ -1,7 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Upload, UploadCloud, FileVideo, Image, X, Play, Calendar, HardDrive, Eye, CheckCircle, AlertCircle, Video, Folder as FolderVideo, Plus, Trash2, DotSquare, DotIcon, CrossIcon, DeleteIcon, Delete } from 'lucide-react';
-import { VideoService } from '../../Features/Video/video.service';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Upload,
+  UploadCloud,
+  FileVideo,
+  Image,
+  X,
+  Play,
+  Calendar,
+  HardDrive,
+  Eye,
+  CheckCircle,
+  AlertCircle,
+  Video,
+  Folder as FolderVideo,
+  Plus,
+  Trash2,
+  DotSquare,
+  DotIcon,
+  CrossIcon,
+  DeleteIcon,
+  Delete,
+} from "lucide-react";
+import { VideoService } from "../../Features/Video/video.service";
+import { useSelector } from "react-redux";
 
 /**
  * VideoUploadPage Component - Complete video upload platform with drag & drop
@@ -20,8 +41,8 @@ const VideoUploadPage = () => {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [toasts, setToasts] = useState([]);
   const user = useSelector((state) => state.auth.userData);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);//video delte
- const [videoToDelete, setVideoToDelete] = useState(null);//video delete
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false); //video delte
+  const [videoToDelete, setVideoToDelete] = useState(null); //video delete
 
   // Refs
   const videoInputRef = useRef(null);
@@ -69,14 +90,14 @@ const VideoUploadPage = () => {
   }, [user]);
 
   //delete Video
-  const handleDelete = async()=>{
+  const handleDelete = async () => {
     try {
-      const res = await VideoService.deleteVideos(videoToDelete._id)
-      console.log(res)
+      const res = await VideoService.deleteVideos(videoToDelete._id);
+      console.log(res);
     } catch (error) {
-      console.log("deleted not")
+      console.log("deleted not");
     }
-  }
+  };
 
   // Toast notification system
   const showToast = (message, type = "success") => {

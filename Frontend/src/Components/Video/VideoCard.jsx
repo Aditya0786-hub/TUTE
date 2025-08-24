@@ -32,7 +32,7 @@ const VideoCard = ({
   // Format duration
   const formatDuration = (seconds) => {
     const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
+    const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
@@ -113,7 +113,7 @@ const VideoCard = ({
         {/* Duration Badge */}
         <div className="absolute bottom-3 right-3 bg-black/80 backdrop-blur-sm text-white text-xs font-medium px-2 py-1 rounded-lg flex items-center space-x-1">
           <Clock className="w-3 h-3" />
-          <span>{Number(video.duration).toFixed(2)}</span>
+          <span>{formatDuration(video.duration)}</span>
         </div>
 
         {/* Quality Badge */}
