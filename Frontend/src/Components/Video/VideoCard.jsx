@@ -196,7 +196,7 @@ const VideoCard = ({
         
         
         {/* Action Bar */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+        {/* <div className="flex items-center justify-between pt-4 border-t border-gray-100">
           <div className="flex items-center space-x-4">
             <button
               onClick={handleLike}
@@ -211,7 +211,7 @@ const VideoCard = ({
             
           </div>
 
-        </div>
+        </div> */}
       </div>
 
       {/* Progress Bar (if video has been watched) */}

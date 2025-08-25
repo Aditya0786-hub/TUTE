@@ -18,13 +18,13 @@ export const VideoService =  {
         })
         return res
     },
-    getUserVideos : async(userId,token)=> {
-        console.log(userId)
+    getUserVideos : async(username,token)=> {
+        console.log(username)
         const res = await axios.get(
           `${API_URl}/getallvideos`,
           {
             params: {
-              userId: userId,
+              username: username,
             },
             headers: {
               Authorization: `Bearer ${token}`,

@@ -31,7 +31,7 @@ import {
 import { AuthService } from "../Features/Auth/AuthService";
 import { useSelector } from "react-redux";
 import { SubscriptionService } from "../Features/Subscriber/subscriber.service";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { VideoService } from "../Features/Video/video.service";
 
 const ProfilePage = () => {
@@ -40,7 +40,7 @@ const ProfilePage = () => {
   const [showMoodSelector, setShowMoodSelector] = useState(false);
   const [currentMood, setCurrentMood] = useState("creative");
   const [profile, setChannel] = useState(null);
-  const [video, setVideos] = useState(null);
+  const [videos, setVideos] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const user = useSelector((state) => state.auth.userData);
@@ -69,7 +69,7 @@ const ProfilePage = () => {
     const token = localStorage.getItem("accessToken");
     try {
       setLoading(true);
-      const res = await VideoService.getUserVideos(user._id, token);
+      const res = await VideoService.getUserVideos(username, token);
       console.log(res.data);
       setVideos(res.data.data.docs);
       setLoading(false);
@@ -80,42 +80,15 @@ const ProfilePage = () => {
     }
   };
 
-  // Mock videos data
-  const videos = [
-    {
-      id: 1,
-      title: "Advanced Figma Prototyping Techniques",
-      thumbnail:
-        "https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=400&h=225",
-      views: 45600,
-      likes: 2340,
-      duration: 1847,
-      uploadDate: "2024-01-15",
-      collaborators: 2,
-    },
-    {
-      id: 2,
-      title: "Color Theory for Digital Artists",
-      thumbnail:
-        "https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=400&h=225",
-      views: 78900,
-      likes: 4560,
-      duration: 2156,
-      uploadDate: "2024-01-10",
-      collaborators: 0,
-    },
-    {
-      id: 3,
-      title: "Building Design Systems from Scratch",
-      thumbnail:
-        "https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=400&h=225",
-      views: 92300,
-      likes: 5670,
-      duration: 3240,
-      uploadDate: "2024-01-05",
-      collaborators: 1,
-    },
-  ];
+  const getAllViews = ()=>{
+    let total = 0
+    //videos is an array
+    for( let i=0;i<videos?.length;i++){
+      total += videos[0].views || 0
+    }
+    return total
+  }
+
 
   // Format numbers
   const formatNumber = (num) => {
@@ -127,7 +100,7 @@ const ProfilePage = () => {
   // Format duration
   const formatDuration = (seconds) => {
     const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
+    const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
@@ -196,13 +169,7 @@ const ProfilePage = () => {
                   </h1>
                   <p className="text-gray-600 mb-2">{profile?.username}</p>
                   <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start space-y-2 sm:space-y-0 sm:space-x-4 text-sm text-gray-500 mb-3">
-                    <div className="flex items-center space-x-1">
-                      <Calendar className="w-4 h-4" />
-                      <span>
-                        Joined{" "}
-                        {new Date(profile?.createdAt).toLocaleDateString()}
-                      </span>
-                    </div>
+                    
                   </div>
                 </div>
 
@@ -244,7 +211,7 @@ const ProfilePage = () => {
                 Total Views
               </span>
             </div>
-            {/* <p className="text-2xl font-bold text-gray-900">{formatNumber(profile.totalViews)}</p> */}
+            <p className="text-2xl font-bold text-gray-900">{formatNumber(getAllViews())}</p>
           </div>
           <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
             <div className="flex items-center space-x-2 mb-2">
@@ -252,65 +219,12 @@ const ProfilePage = () => {
               <span className="text-sm font-medium text-gray-600">
                 Total Videos
               </span>
+            
             </div>
-            {/* <p className="text-2xl font-bold text-gray-900">{profile.collaborationStats.completedCollabs}</p> */}
+            <p className="text-2xl font-bold text-gray-900">{videos?.length}</p>
           </div>
-          {/* <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-            <div className="flex items-center space-x-2 mb-2">
-              <Trophy className="w-5 h-5 text-orange-600" />
-              <span className="text-sm font-medium text-gray-600">Skill Badges</span>
-            </div>
-            <p className="text-2xl font-bold text-gray-900">{profile.skillBadges.length}</p>
-          </div> */}
+         
         </div>
-
-        {/* Skill Badges Section */}
-        {/* <div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
-            <Award className="w-6 h-6 text-purple-600" />
-            <span>Skill Badges</span>
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {profile.skillBadges.map((badge) => (
-              <div key={badge.id} className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
-                <div className={`p-3 rounded-full ${badge.color}`}>
-                  <badge.icon className="w-6 h-6" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 text-sm">{badge.name}</h4>
-                  <p className="text-xs text-gray-600">{badge.level}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div> */}
-
-        {/* Collaboration Hub */}
-        {/* <div className="mt-8 bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-6 border border-purple-100">
-          <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center space-x-2">
-            <Zap className="w-6 h-6 text-purple-600" />
-            <span>Collaboration Hub</span>
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{profile.collaborationStats.activeProjects}</div>
-              <div className="text-sm text-gray-600">Active Projects</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">{profile.collaborationStats.mentoringSessions}</div>
-              <div className="text-sm text-gray-600">Mentoring Sessions</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{profile.collaborationStats.skillsShared}</div>
-              <div className="text-sm text-gray-600">Skills Shared</div>
-            </div>
-            <div className="text-center">
-              <button className="bg-white hover:bg-gray-50 text-purple-600 font-semibold py-2 px-4 rounded-xl border border-purple-200 transition-colors duration-200">
-                Start Collab
-              </button>
-            </div>
-          </div>
-        </div> */}
 
         {/* Content Tabs */}
         <div className="mt-8">
@@ -342,15 +256,16 @@ const ProfilePage = () => {
           <div className="mt-8">
             {activeTab === "videos" && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {videos.map((video) => (
+                {videos?.map((video) => (
+                  <Link to={`/video/${video._id}`}>
                   <div
-                    key={video.id}
+                    key={video?.id}
                     className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-200 overflow-hidden group cursor-pointer"
                   >
                     <div className="relative aspect-video">
                       <img
-                        src={video.thumbnail}
-                        alt={video.title}
+                        src={video?.thumbnail}
+                        alt={video?.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
@@ -362,14 +277,9 @@ const ProfilePage = () => {
                         </div>
                       </div>
                       <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded">
-                        {formatDuration(video.duration)}
+                        {formatDuration(video?.duration)}
                       </div>
-                      {video.collaborators > 0 && (
-                        <div className="absolute top-2 left-2 bg-purple-600 text-white text-xs px-2 py-1 rounded-full flex items-center space-x-1">
-                          <Users className="w-3 h-3" />
-                          <span>{video.collaborators}</span>
-                        </div>
-                      )}
+                      
                     </div>
                     <div className="p-4">
                       <h4 className="font-semibold text-gray-900 mb-2 line-clamp-2">
@@ -379,19 +289,20 @@ const ProfilePage = () => {
                         <div className="flex items-center space-x-4">
                           <div className="flex items-center space-x-1">
                             <Eye className="w-4 h-4" />
-                            <span>{formatNumber(video.views)}</span>
+                            <span>{formatNumber(video?.views)}</span>
                           </div>
-                          <div className="flex items-center space-x-1">
+                          {/* <div className="flex items-center space-x-1">
                             <ThumbsUp className="w-4 h-4" />
                             <span>{formatNumber(video.likes)}</span>
-                          </div>
+                          </div> */}
                         </div>
                         <span>
-                          {new Date(video.uploadDate).toLocaleDateString()}
+                          {/* {new Date(video.uploadDate).toLocaleDateString()} */}
                         </span>
                       </div>
                     </div>
                   </div>
+                  </Link>
                 ))}
               </div>
             )}

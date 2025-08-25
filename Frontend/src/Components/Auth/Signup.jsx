@@ -83,7 +83,8 @@ const Signup = ({ setLogin }) => {
     >
       {/* overlay */}
       <div className="absolute backdrop-blur-sm inset-0 bg-black/50"></div>
-      <div className="bg-white z-5  rounded-lg shadow-lg w-full max-w-md p-8">
+      <div className="bg-white/10 border border-white/20 
+    backdrop-blur-lg hover:bg-white/20 transition  rounded-lg shadow-lg w-full max-w-md p-8">
         <form onSubmit={(e) => handleSubmit(e)}>
           <div className="flex justify-center mb-4">
             <div className="bg-indigo-100 p-3 rounded-full">
