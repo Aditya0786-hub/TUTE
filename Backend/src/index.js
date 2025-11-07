@@ -2,8 +2,7 @@ import dotenv from "dotenv"
 // import express  from "express"
 import {app} from "./app.js";
 import connectDB from "./db/index.js";
-import passport from "passport";
-import './utils/passport.js'
+
 
 
 
@@ -21,5 +20,3 @@ connectDB()
 .catch((err)=>{
     console.log("MONGODB connection failed!!",err)
 })
-
-app.use(passport.initialize());
