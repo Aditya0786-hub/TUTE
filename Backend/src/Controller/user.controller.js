@@ -99,6 +99,7 @@ const registerUser = asyncHandler(async (req, res) => {
     sameSite: "none",
   };
 
+  
   return res
     .status(201)
     .cookie("accessToken", accessToken, option)
