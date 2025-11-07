@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URl = 'http://localhost:7000/api/v2/subscription'
+const API_URl = 'https://tute-w689.onrender.com/api/v2/subscription'
 
 export const SubscriptionService = {
     toggleSubscription: async(username)=> {

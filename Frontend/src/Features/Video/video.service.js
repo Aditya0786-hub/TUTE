@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const API_URl = 'http://localhost:7000/api/v2/video'
-const API_URl2 = 'http://localhost:7000/api/v2/comments'
+const API_URl = 'https://tute-w689.onrender.com/api/v2/video'
+const API_URl2 = 'https://tute-w689.onrender.com/api/v2/comments'
 
 
 export const VideoService =  {

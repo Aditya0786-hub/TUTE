@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URl = 'http://localhost:7000/api/v2/likes'
+const API_URl = 'https://tute-w689.onrender.com/api/v2/likes'
 
 export const likeService = {
     getVideoLike : async(videoId)=>{
