@@ -99,7 +99,7 @@ const registerUser = asyncHandler(async (req, res) => {
     sameSite: "none",
   };
 
-  
+
   return res
     .status(201)
     .cookie("accessToken", accessToken, option)
@@ -154,8 +154,8 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const option = {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
   };
 
   return res
