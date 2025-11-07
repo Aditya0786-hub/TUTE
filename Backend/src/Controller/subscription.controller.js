@@ -63,24 +63,41 @@ const getchannelSubscriber = asyncHandler(async (req, res) => {
 });
 
 const getUserSubscribedChannel = asyncHandler(async (req, res) => {
-  const { Channelusername } = req.body;
-  const ChannelId = await User.findOne({
-    username: Channelusername,
-  });
-  console.log(ChannelId);
-  if (!ChannelId) {
-    throw new ApiError(401, "ChannelId not found");
-  }
-  const subscription = await Subscription.find({
-    subscriber: ChannelId._id,
-  });
-  console.log(subscription);
+  
+  const subscriptions = await Subscription.aggregate([
+    {
+      $match: {
+        subscriber: req.user._id, // filter by subscriber (user who subscribed to channels)
+      },
+    },
+    {
+      $lookup: {
+        from: "users", // collection to join with (check your model name, mongoose pluralizes)
+        localField: "channel", // field in Subscription schema pointing to channel id
+        foreignField: "_id",   // field in User collection
+        as: "channelDetails",  // output array
+      },
+    },
+    {
+      $unwind: "$channelDetails", // flatten array to object
+    },
+    {
+      $project: {
+        _id: 0,
+        subscribedChannelId: "$channelDetails._id",
+        username: "$channelDetails.username",
+        email: "$channelDetails.email",
+        avatar: "$channelDetails.avatar",
+        subscribedAt: "$createdAt",
+      },
+    },
+  ]);
 
   return res
     .status(200)
-    .json(new ApiResponse(201, subscription, "Subscription list fetched"));
-
-  //fully woking
+    .json(new ApiResponse(200, subscriptions, "Subscribed channel list fetched"));
 });
+  //fully woking
 
-export { toggleSubscription, getchannelSubscriber };
+
+export { toggleSubscription, getchannelSubscriber, getUserSubscribedChannel };

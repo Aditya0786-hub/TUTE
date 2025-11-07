@@ -57,28 +57,31 @@ const ProfilePage = () => {
         console.log(error.response?.message || "Channel not Fetched");
       }
     };
-    console.log(user);
+
+     const userVideos = async () => {
+       const token = localStorage.getItem("accessToken");
+       try {
+         setLoading(true);
+         const res = await VideoService.getUserVideos(user._id, token);
+         console.log(res.data);
+         setVideos(res.data.data.docs);
+         setLoading(false);
+         console.log(videos);
+       } catch (error) {
+         console.log(
+           error?.response?.data?.message || "User Videos not fetched"
+         );
+         setLoading(false);
+       }
+     };
     if (user) {
       fetchChannel();
       userVideos();
     }
   }, [user]);
 
-  //Fetching for user videos
-  const userVideos = async () => {
-    const token = localStorage.getItem("accessToken");
-    try {
-      setLoading(true);
-      const res = await VideoService.getUserVideos(username, token);
-      console.log(res.data);
-      setVideos(res.data.data.docs);
-      setLoading(false);
-      console.log(video);
-    } catch (error) {
-      console.log(error?.response?.data?.message || "User Videos not fetched");
-      setLoading(false);
-    }
-  };
+ 
+ 
 
   const getAllViews = ()=>{
     let total = 0
@@ -254,12 +257,12 @@ const ProfilePage = () => {
 
           {/* Tab Content */}
           <div className="mt-8">
-            {activeTab === "videos" && (
+            {videos.length > 0 ? (              
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {videos?.map((video) => (
-                  <Link to={`/video/${video._id}`}>
+                  <Link key={video?.id} to={`/video/${video._id}`}>
                   <div
-                    key={video?.id}
+                    
                     className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-200 overflow-hidden group cursor-pointer"
                   >
                     <div className="relative aspect-video">
@@ -305,52 +308,8 @@ const ProfilePage = () => {
                   </Link>
                 ))}
               </div>
-            )}
+            ):(<h1 className="flex justify-center items-center text-2xl">No Videos Found</h1>)}
 
-            {activeTab === "collaborations" && (
-              <div className="text-center py-12">
-                <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Collaboration Projects
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  Discover projects created with other creators
-                </p>
-                <button className="bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors duration-200">
-                  View All Collaborations
-                </button>
-              </div>
-            )}
-
-            {activeTab === "tutorials" && (
-              <div className="text-center py-12">
-                <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Tutorial Series
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  Step-by-step guides and educational content
-                </p>
-                <button className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors duration-200">
-                  Browse Tutorials
-                </button>
-              </div>
-            )}
-
-            {activeTab === "community" && (
-              <div className="text-center py-12">
-                <MessageCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Community Posts
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  Updates, behind-the-scenes, and community interactions
-                </p>
-                <button className="bg-green-600 text-white px-6 py-3 rounded-xl hover:bg-green-700 transition-colors duration-200">
-                  Join Community
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>

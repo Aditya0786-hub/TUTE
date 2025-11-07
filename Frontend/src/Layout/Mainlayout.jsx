@@ -2,7 +2,6 @@ import React,{useState} from 'react'
 import Navbar from '../Components/Home/Navbar'
 import { Zap } from 'lucide-react';
 import { useSelector } from 'react-redux';
-import Sidebar from '../Components/Home/Sidebar,';
 import Sidebar2 from '../Components/Home/Sidebar2';
 
 const Mainlayout = ({children}) => {

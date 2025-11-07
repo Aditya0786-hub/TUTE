@@ -23,7 +23,7 @@ const Sidebar2 = () => {
     { icons: Heart, label: "Liked Videos", link: "/liked" },
     { icons: Clock, label: "Watch History", link: "/history" },
     { icons: Video, label: "My Content", link: "/mycontent" },
-    { icons: Folder, label: "Subscribers", link: "/subscribers" },
+    { icons: Folder, label: "Subscription", link: "/subscription" },
   ];
 
   const handleLogout = async () => {

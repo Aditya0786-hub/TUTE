@@ -11,6 +11,7 @@ import VideoDetail from '../Pages/VideoDetail.jsx'
 import ProfilePage from '../Components/Profile.jsx'
 import ProtectedRoute from './ProtectedRoute.jsx'
 import Upload from '../Components/Video/Upload.jsx'
+import Subscription from '../Pages/Subscription.jsx'
 
 
 
@@ -26,6 +27,7 @@ const AppRoutes = () => {
         <Route path='/video/:videoId' element={<VideoDetail/>}/>
         <Route path='/profile/:username' element={<ProfilePage/>}/>
         <Route path='/mycontent' element={<Upload/>}/>        
+        <Route path='/subscription' element={<Subscription/>}/>        
       </Routes>
     </div>
   )

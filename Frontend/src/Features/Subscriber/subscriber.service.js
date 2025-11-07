@@ -7,6 +7,12 @@ export const SubscriptionService = {
         const res = await axios.post(`${API_URl}/channel/${username}`,{},{
             withCredentials: true
         })
-        return
-    }
+        return res
+    },
+    getSubscribedChannels: async()=> {
+        const res = await axios.get(`${API_URl}/getusersubscribedchannel`,{
+            withCredentials: true
+        })
+        return res
+    },
 }
